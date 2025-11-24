@@ -1,4 +1,4 @@
-// js/signup.js - FINALIZED WITH MOBILE OTP VERIFICATION
+// js/signup.js - Frontend Signup Logic (API Dependent)
 
 document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signupForm");
@@ -20,23 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileRegex = /^\d{10}$/;
 
   // OTP State
-  let generatedOtp = null;
-  let otpExpires = null;
-  let otpTimerInterval = null;
   let isOtpVerified = false;
-
-  const loadUsers = () => {
-    try { return JSON.parse(localStorage.getItem("nextEarnXUsers") || "[]"); } // Updated key
-    catch { return []; }
-  };
-  const saveUsers = (users) => localStorage.setItem("nextEarnXUsers", JSON.stringify(users));
 
   // --- OTP TIMER AND SEND LOGIC ---
   function startOtpTimer() {
-    clearInterval(otpTimerInterval);
-    otpExpires = Date.now() + 60 * 1000; // 60 seconds validity
+    // UI Timer Logic (Kept)
+    let otpExpires = Date.now() + 60 * 1000; // 60 seconds validity
     resendOtpBtn.disabled = true;
     
+    clearInterval(otpTimerInterval);
     otpTimerInterval = setInterval(() => {
       const diff = Math.max(0, otpExpires - Date.now());
       const sec = Math.ceil(diff / 1000);
@@ -48,23 +40,36 @@ document.addEventListener("DOMContentLoaded", () => {
         otpStatusMessage.textContent = "OTP expired. Resend or try again.";
         otpStatusMessage.style.color = "red";
         resendOtpBtn.disabled = false;
-        generatedOtp = null; // Invalidate OTP
+        // Server side OTP should also be invalidated
       }
     }, 500);
   }
 
-  function generateAndSendOtp() {
-    generatedOtp = Math.floor(100000 + Math.random() * 900000);
-    console.log("DEV SIGNUP OTP (for testing):", generatedOtp); // DEV-ONLY
-    
-    otpVerificationSection.style.display = 'block';
-    sendOtpBtn.style.display = 'none';
-    otpStatusMessage.textContent = `OTP sent to ${mobileInput.value} (Check console).`;
-    otpStatusMessage.style.color = "yellow";
-    
-    startOtpTimer();
+  function handleSendOtpAPI(mobile) {
+    // --- API CALL: SEND OTP FOR MOBILE ---
+    fetch('/api/signup_send_otp.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mobile })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            otpVerificationSection.style.display = 'block';
+            sendOtpBtn.style.display = 'none';
+            otpStatusMessage.textContent = `✅ OTP sent to ${mobile}.`;
+            otpStatusMessage.style.color = "limegreen";
+            startOtpTimer();
+        } else {
+            alert(data.message || "❌ OTP could not be sent. Mobile already registered?");
+        }
+    })
+    .catch(error => {
+        console.error('Send OTP API error:', error);
+        alert('An unexpected error occurred.');
+    });
   }
-  
+
   sendOtpBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const mobile = mobileInput.value.trim();
@@ -73,70 +78,81 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("Please enter a valid 10-digit mobile number.");
           return;
       }
-      
-      // Check if user with this mobile already exists (Optional but good practice)
-      const users = loadUsers();
-      if (users.some(u => u.mobile === mobile)) {
-          alert("This mobile number is already registered.");
-          return;
-      }
-      
-      generateAndSendOtp();
+      handleSendOtpAPI(mobile);
   });
 
-  resendOtpBtn.addEventListener('click', generateAndSendOtp);
+  resendOtpBtn.addEventListener('click', () => {
+      const mobile = mobileInput.value.trim();
+      if (!mobileRegex.test(mobile)) return;
+      handleSendOtpAPI(mobile);
+  });
 
   // --- OTP VERIFICATION LOGIC ---
   verifyOtpBtn.addEventListener('click', () => {
       const entered = otpInput.value.trim();
+      const mobile = mobileInput.value.trim();
       
-      if (!generatedOtp) {
-          alert("Please request a new OTP.");
+      if (!entered || !mobileRegex.test(mobile)) {
+          alert("Enter OTP and a valid mobile number.");
           return;
       }
       
-      if (Date.now() > otpExpires) {
-          alert("OTP expired. Please request a new OTP.");
-          return;
-      }
-      
-      if (Number(entered) === generatedOtp) {
-          // Success: Mark verification, disable controls, enable final button
-          isOtpVerified = true;
-          clearInterval(otpTimerInterval);
-          
-          otpStatusMessage.textContent = "✅ Mobile number verified!";
-          otpStatusMessage.style.color = "limegreen";
-          
-          otpInput.disabled = true;
-          verifyOtpBtn.disabled = true;
-          signupFinalBtn.disabled = false; // ENABLE FINAL SIGNUP BUTTON
-          
-          alert("Mobile verified. You can now complete your registration.");
-      } else {
-          otpStatusMessage.textContent = "❌ Invalid OTP. Try again.";
-          otpStatusMessage.style.color = "red";
-      }
+      // --- API CALL: VERIFY OTP ---
+      fetch('/api/signup_verify_otp.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile: mobile, otp: entered })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.status === 'success') {
+              isOtpVerified = true;
+              clearInterval(otpTimerInterval);
+              otpStatusMessage.textContent = "✅ Mobile number verified!";
+              otpStatusMessage.style.color = "limegreen";
+              otpInput.disabled = true;
+              verifyOtpBtn.disabled = true;
+              signupFinalBtn.disabled = false; // ENABLE FINAL SIGNUP BUTTON
+              alert("Mobile verified. You can now complete your registration.");
+          } else {
+              otpStatusMessage.textContent = data.message || "❌ Invalid OTP. Try again.";
+              otpStatusMessage.style.color = "red";
+          }
+      })
+      .catch(error => {
+          console.error('Verify OTP API error:', error);
+          alert('An unexpected error occurred during verification.');
+      });
   });
 
 
   // --- INPUT VALIDATION AND FORM SUBMISSION ---
   usernameInput.addEventListener("input", () => {
-    // ... (Existing username validation logic remains the same) ...
+    // Local validation for format
     const value = usernameInput.value.trim();
     if (!usernameRegex.test(value)) {
       usernameMsg.textContent = "❌ Username 1-15 chars, only letters, numbers, _ allowed";
       usernameMsg.style.color = "red";
       return;
     }
-    const users = loadUsers();
-    if (users.some(u => u.username.toLowerCase() === value.toLowerCase())) {
-      usernameMsg.textContent = "❌ Username already taken";
-      usernameMsg.style.color = "red";
-    } else {
-      usernameMsg.textContent = "✅ Username available";
-      usernameMsg.style.color = "limegreen";
-    }
+    
+    // --- API CALL: CHECK USERNAME AVAILABILITY ---
+    fetch(`/api/check_username.php?username=${value}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.available) {
+            usernameMsg.textContent = "✅ Username available";
+            usernameMsg.style.color = "limegreen";
+        } else {
+            usernameMsg.textContent = "❌ Username already taken";
+            usernameMsg.style.color = "red";
+        }
+    })
+    .catch(error => {
+         console.error('Username check API error:', error);
+         usernameMsg.textContent = "⚠️ Check failed. Try again.";
+         usernameMsg.style.color = "yellow";
+    });
   });
 
   signupForm.addEventListener("submit", (e) => {
@@ -157,21 +173,31 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please fill all fields!");
       return;
     }
-    // Final validations (check that mobile and username passed all previous checks)
+    
+    // Final local validations
     if (!usernameRegex.test(username)) { alert("Invalid username. Follow rules."); return; }
     if (!/^[^\s@]+@gmail\.com$/.test(email)) { alert("Please use a valid Gmail address."); return; }
     if (!mobileRegex.test(mobile)) { alert("Mobile must be 10 digits."); return; }
     if (password.length < 6) { alert("Password must be at least 6 characters."); return; }
-
-    const users = loadUsers();
-    if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) { alert("Username already taken."); return; }
-    if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) { alert("Email already registered."); return; }
-
-    // Save user
-    users.push({ fullname, username, email, mobile, password });
-    saveUsers(users);
-
-    alert("Account created successfully! Please login.");
-    window.location.href = "login.html"; // go to login
+    
+    // --- API CALL: FINAL SIGNUP ---
+    fetch('/api/signup_final.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullname, username, email, mobile, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert("✅ Account created successfully! Please login.");
+            window.location.href = "login.html";
+        } else {
+            alert(data.message || "❌ Signup failed. Try a different username/email.");
+        }
+    })
+    .catch(error => {
+        console.error('Final Signup API error:', error);
+        alert('An unexpected error occurred during registration.');
+    });
   });
 });

@@ -1,52 +1,48 @@
-// panel/js/index.js - Final Merged Code for NextEarnX Dashboard (New UI)
+// panel/js/index.js - Frontend Logic (API Dependent)
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 0. NEW UI ELEMENTS ---
+    // --- 0. UI ELEMENTS ---
     const usernameDisplay = document.getElementById('usernameDisplay');
     const balanceDisplay = document.getElementById('balanceDisplay'); 
     const subscriptionStatus = document.getElementById('subscriptionStatus');
     const addFundsBtn = document.getElementById('addFundsBtn');
     
-    // --- UTILITIES ---
-    function getBalance() {
-        try {
-            return parseFloat(localStorage.getItem('nextEarnXBalance') || '0.00');
-        } catch(e) { return 0.00; }
+    // --- API & DATA STUBS (PHP se data aayega) ---
+    // In functions mein data server se aane ke baad UI update hoga.
+    function getBalanceFromDOM() {
+        // Assume balance is pre-filled by PHP in the span
+        const balanceText = balanceDisplay ? balanceDisplay.textContent.replace('₹', '').trim() : '0.00';
+        return parseFloat(balanceText) || 0.00;
     }
     
-    function getSubscription() {
-        try {
-            const sub = JSON.parse(localStorage.getItem('subscription'));
-            if (!sub || Date.now() > sub.expiry) { 
-                localStorage.removeItem('subscription');
-                return null;
-            }
-            return sub;
-        } catch(e) { return null; }
+    function getSubscriptionStatusFromDOM() {
+        // Assume PHP provides a global variable or status class on the body/user element
+        // For now, we'll check if the subscriptionStatus element has a green color (mock check)
+        return subscriptionStatus && subscriptionStatus.style.color === 'rgb(170, 255, 170)'; // #aaffaa (Green)
     }
 
-    function isSubscribed() { return !!getSubscription(); }
-    
-    function getCurrentUsername() {
-        try {
-            const user = JSON.parse(localStorage.getItem('nextEarnXCurrentUser'));
-            return user ? user.username : 'Guest'; 
-        } catch(e) { 
-            return 'Guest'; 
-        }
+    function getCurrentUsernameFromDOM() {
+        // Assume username is pre-filled by PHP
+        return usernameDisplay ? usernameDisplay.textContent.trim() : 'Guest'; 
     }
-
 
     // --- 1. CORE LOGOUT LOGIC & SIDEBAR ---
     const logoutBtn = document.getElementById('logoutBtn');
     const sidebarLogoutBtn = document.getElementById('sidebarLogout');
 
     function handleLogout() {
-        localStorage.removeItem('session'); 
-        localStorage.removeItem('nextEarnXCurrentUser'); 
-        alert("Logged out from NextEarnX!");
-        window.location.href = 'login.html';
+        // Placeholder for API call to end server session
+        fetch('/api/logout.php', { method: 'POST' })
+            .then(() => {
+                alert("Logged out from NextEarnX!");
+                window.location.href = 'login.html';
+            })
+            .catch(e => {
+                 console.error('Logout failed:', e);
+                 alert("Logout successful (Local UI only)!");
+                 window.location.href = 'login.html';
+            });
     }
 
     if(logoutBtn) logoutBtn.addEventListener('click', handleLogout);
@@ -73,45 +69,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. DASHBOARD UI UPDATES (STATUS, BALANCE & LOCKS) ---
 
     function updateUsernameUI() {
+        // This function now just reads the pre-rendered content
         if (usernameDisplay) {
-            const currentUsername = getCurrentUsername();
+            const currentUsername = getCurrentUsernameFromDOM();
             usernameDisplay.textContent = currentUsername.charAt(0).toUpperCase() + currentUsername.slice(1);
         }
     }
     
     function updateBalanceUI() {
+        // This function just reads the pre-rendered content
         if (balanceDisplay) {
-            balanceDisplay.textContent = `₹${getBalance().toFixed(2)}`;
+            balanceDisplay.textContent = `₹${getBalanceFromDOM().toFixed(2)}`;
         }
     }
-
+    
+    // PHP will inject subscription details (plan, expiry) into the HTML
     function updateSubscriptionStatus() {
-        const subscriptionData = getSubscription(); 
-
+        // Status element check - PHP should pre-render this.
         if (subscriptionStatus) {
-            if (subscriptionData) {
-                const expiryDate = new Date(subscriptionData.expiry);
-                const options = { year: 'numeric', month: 'short', day: 'numeric' };
-                const formattedDate = expiryDate.toLocaleDateString('en-IN', options);
-
-                subscriptionStatus.innerHTML = `Plan: <b>${subscriptionData.plan}</b> | Expires: <b>${formattedDate}</b>`;
-                subscriptionStatus.style.color = '#aaffaa'; 
+            if (getSubscriptionStatusFromDOM()) {
+                // If subscribed, PHP should have set innerHTML and color
+                // e.g., subscriptionStatus.style.color = '#aaffaa';
             } else {
-                subscriptionStatus.innerHTML = `Status: <b style="color:#ff0077;">Not Subscribed</b>`;
-                subscriptionStatus.style.color = '#ff0077'; 
+                // If not subscribed, PHP should have set innerHTML and color
+                // e.g., subscriptionStatus.innerHTML = `Status: <b style="color:#ff0077;">Not Subscribed</b>`;
             }
         }
     }
     
     function refreshFeatureLocks() {
-        const subscribed = isSubscribed();
+        const subscribed = getSubscriptionStatusFromDOM();
         
         document.querySelectorAll('.feature-link').forEach(link => {
-            // Target both feature-card-item and quick-feature-card
             const cardItem = link.querySelector('.feature-card-item') || link.querySelector('.quick-feature-card');
             const badge = cardItem ? cardItem.querySelector('.lock-badge') : null;
             
-            // Check if feature needs locking (external links don't have data-lock/are skipped)
             const feature = link.dataset.feature;
             if (['Telegram Channel', 'Contact Us'].includes(feature)) return; 
             
@@ -148,10 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
                  return;
             }
             
-            // Allow external links to pass without subscription check
             if (link.classList.contains('external-link')) return;
 
-            if(!isSubscribed()) {
+            if(!getSubscriptionStatusFromDOM()) {
                 e.preventDefault();
                 window.location.href = `subscription.html?redirect=${encodeURIComponent(feature)}`;
             }
@@ -165,9 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshFeatureLocks(); 
 
     // 5. HANDLE AUTO-OPEN AFTER PURCHASE
+    // This part assumes the redirection logic remains on the client side after a server-side success.
     (function autoOpenFeature(){
         const params = new URLSearchParams(location.search);
-        if(params.has('open') && isSubscribed()){
+        // Check if status is success and subscription is active
+        if(params.get('status') === 'success' && params.has('open') && getSubscriptionStatusFromDOM()){
             const feature = params.get('open');
             const link = document.querySelector(`.feature-link[data-feature="${feature}"]`);
             if(link) window.location.href = link.href;

@@ -1,33 +1,26 @@
-// js/login.js
+// panel/js/script.js - Frontend Login/OTP UI Flow (API Dependent)
+
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const passwordInput = document.getElementById("password");
   const userLoginInput = document.getElementById("userLogin");
 
-  // panel/js/script.js ke DOMContentLoaded block ke andar add karein
-
-  // Password Toggle Logic
+  // Password Toggle Logic (Kept)
   const togglePasswordBtn = document.getElementById("togglePassword");
-
   if (togglePasswordBtn) {
     togglePasswordBtn.addEventListener("click", () => {
-      // Check current type of the password input
       const currentType = passwordInput.getAttribute("type");
-
-      // Toggle the type attribute
       if (currentType === "password") {
         passwordInput.setAttribute("type", "text");
-        togglePasswordBtn.textContent = "🔒"; // Change icon to lock/eye-off
+        togglePasswordBtn.textContent = "🔒"; 
       } else {
         passwordInput.setAttribute("type", "password");
-        togglePasswordBtn.textContent = "👁"; // Change icon back to eye
+        togglePasswordBtn.textContent = "👁"; 
       }
     });
   }
 
-// NOTE: passwordInput element is already defined at the start of the file.
-
-  // OTP modal elements
+  // OTP modal elements (Kept for UI control)
   const otpModal = document.getElementById("otpModal");
   const otpInput = document.getElementById("otpInput");
   const otpMessage = document.getElementById("otpMessage");
@@ -37,27 +30,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const otpTimer = document.getElementById("otpTimer");
   const closeOtpBtn = document.getElementById("closeOtpBtn");
 
-  let generatedOtp = null;
-  let otpExpires = null;
+  // OTP State (Kept for UI flow, but values come from/go to API)
+  let currentUserIdentifier = null; // Store username/email temporarily for API
   let otpTimerInterval = null;
-  let currentUser = null;
-
-  const loadUsers = () => {
-    // FIX: Use the consistent key 'nextEarnXUsers'
-    try { return JSON.parse(localStorage.getItem("nextEarnXUsers") || "[]"); }
-    catch { return []; }
-  };
-
-  function findUserByLogin(login) {
-    const users = loadUsers();
-    if (login.includes("@")) {
-      return users.find(u => u.email.toLowerCase() === login.toLowerCase());
-    } else {
-      return users.find(u => u.username.toLowerCase() === login.toLowerCase());
-    }
-  }
 
   function startOtpTimer() {
+    // Timer Logic (Kept)
+    let otpExpires = Date.now() + 5 * 60 * 1000; // Mock 5 minutes
     clearInterval(otpTimerInterval);
     otpTimerInterval = setInterval(() => {
       const diff = Math.max(0, otpExpires - Date.now());
@@ -73,20 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openOtpModal(email) {
+    // UI Logic (Kept)
     otpModal.style.display = "flex";
     otpMessage.textContent = `OTP sent to ${email}`;
     otpInput.value = "";
     startOtpTimer();
   }
-
-  function generateAndShowOtp(email) {
-    generatedOtp = Math.floor(100000 + Math.random() * 900000);
-    otpExpires = Date.now() + 5 * 60 * 1000; // 5 minutes
-    console.log("DEV OTP (for testing):", generatedOtp); // dev-only
-    openOtpModal(email);
-  }
-
-  // Login form submit -> validate credentials -> generate OTP
+  
+  // Login form submit -> API call for credentials check and OTP send
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const loginVal = userLoginInput.value.trim();
@@ -94,67 +67,89 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!loginVal || !password) { alert("Please fill all fields!"); return; }
 
-    const user = findUserByLogin(loginVal);
-    if (!user) { alert("User not found. Please sign up."); return; }
-    if (user.password !== password) { alert("Incorrect password."); return; }
+    currentUserIdentifier = loginVal; // Store for OTP resend
 
-    // --- START: NEW FREEZE/BAN CHECK ---
-    const userStatus = user.status || 'active'; 
-    if (userStatus === 'banned') {
-        alert("🚫 Account Banned. Please contact support.");
-        return;
-    }
-    if (userStatus === 'frozen') {
-        alert("⚠️ Account Frozen. Access temporarily blocked.");
-        return;
-    }
-    // --- END: NEW FREEZE/BAN CHECK ---
-    // --- END: NEW FREEZE/BAN CHECK ---
-    
-    currentUser = user;
-    generateAndShowOtp(user.email);
+    // --- API CALL: CHECK CREDENTIALS & SEND OTP ---
+    fetch('/api/auth_login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login: loginVal, password: password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            openOtpModal(data.email); // Use email returned by server
+        } else {
+            alert(data.message || "Login failed. Check credentials/status.");
+        }
+    })
+    .catch(error => {
+        console.error('Login API error:', error);
+        alert('An unexpected error occurred during login.');
+    });
   });
 
   // Verify OTP
   verifyOtpBtn.addEventListener("click", () => {
     const entered = otpInput.value.trim();
     if (!entered) { alert("Enter OTP"); return; }
-    if (!generatedOtp) { alert("No OTP generated. Please resend."); return; }
-    if (Date.now() > otpExpires) { alert("OTP expired. Please resend."); return; }
-    if (Number(entered) === generatedOtp) {
-      // success: save current user session and redirect
-      // FIX: Use the consistent key 'nextEarnXCurrentUser'
-      localStorage.setItem("nextEarnXCurrentUser", JSON.stringify(currentUser));
-      alert("✅ Login successful!");
-      // close modal and redirect
-      otpModal.style.display = "none";
-      window.location.href = "index.html";
-    } else {
-      alert("❌ Invalid OTP. Try again.");
-    }
+    
+    // --- API CALL: VERIFY OTP ---
+    fetch('/api/auth_verify_otp.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login: currentUserIdentifier, otp: entered })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert("✅ Login successful!");
+            otpModal.style.display = "none";
+            // Server should have set session cookies before redirect
+            window.location.href = "index.html"; 
+        } else {
+            alert(data.message || "❌ Invalid OTP. Try again.");
+        }
+    })
+    .catch(error => {
+        console.error('Verify OTP API error:', error);
+        alert('An unexpected error occurred during verification.');
+    });
   });
 
   // Resend OTP
   resendOtpBtn.addEventListener("click", () => {
-    if (!currentUser) { alert("Session lost. Please login again."); return; }
-    generateAndShowOtp(currentUser.email);
+    if (!currentUserIdentifier) { alert("Session lost. Please login again."); return; }
+    
+    // --- API CALL: RESEND OTP ---
+    fetch('/api/auth_resend_otp.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login: currentUserIdentifier })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            openOtpModal(data.email); // Restart timer/modal
+            alert("✅ OTP resent!");
+        } else {
+            alert(data.message || "❌ Could not resend OTP.");
+        }
+    })
+    .catch(error => {
+        console.error('Resend OTP API error:', error);
+        alert('An unexpected error occurred during resend.');
+    });
   });
 
-  // Dev: show OTP (only for testing; remove for production)
+  // Dev: show OTP (UI kept for development)
   showOtpDev.addEventListener("click", () => {
-    if (generatedOtp) alert("DEV OTP: " + generatedOtp);
-    else alert("No OTP currently generated.");
+     alert("NOTE: OTP is now generated on the server (PHP). This button is for DEV/MOCK display only.");
   });
 
-  // Close OTP modal
+  // Close OTP modal (Kept)
   closeOtpBtn.addEventListener("click", () => {
     otpModal.style.display = "none";
     clearInterval(otpTimerInterval);
   });
-  
-  // --- START: REDUNDANT SIMPLE LOGIN BLOCK REMOVED/SKIPPED ---
-  /* The original file had a second simple login block which is redundant as the OTP flow is preferred. 
-    It has been omitted to keep the logic clean and use the OTP flow.
-  */
-  // --- END: REDUNDANT SIMPLE LOGIN BLOCK REMOVED/SKIPPED ---
 });
