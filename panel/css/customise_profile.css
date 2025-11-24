@@ -1,0 +1,304 @@
+/* panel/css/customise_profile.css - NextEarnX Profile Customization Styles */
+
+/* --- BASE STYLES --- */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: linear-gradient(135deg, #0a0a1a, #1a0a2a);
+    color: #e6eef8;
+    min-height: 100vh;
+    overflow-x: hidden; 
+    padding-top: 75px; 
+    position: relative;
+}
+
+/* --- Animated Background Layer --- */
+body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+    background: radial-gradient(circle at 10% 20%, rgba(106,17,203,0.1), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(37,117,252,0.1), transparent 30%);
+    mix-blend-mode: screen;
+    animation: slowPan 30s infinite alternate;
+}
+@keyframes slowPan {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-5%, 5%); }
+}
+
+/* --- NAVBAR --- */
+.navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    background: rgba(15, 15, 30, 0.6); backdrop-filter: blur(15px) saturate(1.2);
+    display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.menu-btn { color: #00e0ff; font-size: 24px; text-decoration: none; }
+.logo { font-size: 24px; font-weight: 700; color: #fff; }
+.logo span { color: #00e0ff; }
+#logoutBtn { background: #ff0077; border: none; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+
+/* --- MAIN CONTAINER & CARDS --- */
+.customise-container {
+    max-width: 600px;
+    margin: 20px auto; 
+    padding: 0 20px;
+}
+.card {
+    margin-bottom: 20px;
+    padding: 25px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    backdrop-filter: blur(12px) saturate(1.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* --- TOP PROFILE HEADER (NEW DESIGN) --- */
+.profile-header {
+    background: linear-gradient(135deg, #4169E1, #00e0ff); /* Blue/Cyan Gradient */
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.profile-info-main {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.profile-logo-box {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #fff;
+    flex-shrink: 0;
+}
+.profile-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.profile-text {
+    color: #fff;
+}
+.main-username {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+.main-mobile {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+.upload-btn {
+    background: #fff;
+    color: #4169E1;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+.upload-btn:hover {
+    background: #eee;
+}
+
+/* --- PROFILE INFORMATION SECTION --- */
+.info-header {
+    color: #ffcc00;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.section-title {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.info-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+.info-group label {
+    font-size: 0.9rem;
+    color: #00e0ff;
+    width: 120px;
+}
+.info-value {
+    flex-grow: 1;
+    color: #fff;
+    font-weight: 500;
+    padding-right: 15px;
+    cursor: default;
+}
+.edit-btn, .copy-btn {
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #ffcc00;
+    transition: color 0.1s;
+    padding: 5px;
+}
+.edit-btn:hover { color: #ff0077; }
+.copy-btn:hover { color: #aaffaa; }
+
+/* Styles for Editable Input fields (temporarily added for editing) */
+.info-group input {
+    flex-grow: 1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background: #333355;
+    color: #fff;
+    margin-right: 15px;
+}
+
+.reset-btn {
+    background: #ff0077;
+    border-color: #ff0077;
+    color: #fff;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: center;
+}
+.reset-btn:hover {
+    background: #ff3399;
+}
+
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 450px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .info-group {
+        flex-wrap: wrap;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .info-group label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .info-value {
+        padding-right: 10px;
+    }
+    .edit-btn, .copy-btn {
+        margin-left: auto;
+        padding: 5px 0;
+    }
+}
+
+
+
+/* --- ADD THIS CODE AT THE END OF customise_profile.css --- */
+
+/* --- MODAL STYLES (Glass Overlay) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    border: 1px solid rgba(0, 224, 255, 0.4); 
+    backdrop-filter: blur(10px) saturate(1.2);
+    box-shadow: 0 0 20px rgba(0, 224, 255, 0.4);
+    width: 90%;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 18px;
+    position: relative;
+    color: #fff;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 10px; right: 15px;
+    background: none;
+    border: none;
+    color: #00e0ff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-content h3 {
+    color: #ffcc00;
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+}
+.modal-info {
+    color: #aaa;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.modal-content .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+.modal-content label {
+    display: block;
+    color: #00e0ff;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #333355;
+    color: #fff;
+}
+
+.modal-content .save-btn {
+    margin-top: 20px;
+    width: 100%;
+    background: #ff0077;
+    border-color: #ff0077;
+}
+.modal-content .save-btn:hover {
+    background: #ff3399;
+}
+
+/* Password Toggle Specific Styles */
+.password-box {
+    position: relative;
+}
+.password-box input {
+    padding-right: 40px; /* Space for icon */
+}
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #ffcc00;
+    padding: 5px;
+}

@@ -1,0 +1,215 @@
+ 
+
+/* ---------- Login container (frosted card) ---------- */
+.login-container {
+    /* REMOVED fixed positioning and margin */
+    position: relative;
+    z-index: 2;  
+    width: 400px;
+    margin: auto;
+    margin-top: 12%;
+    padding: 32px;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(8px) saturate(1.05);
+    -webkit-backdrop-filter: blur(8px) saturate(1.05);
+    color: #e6eef8;
+    text-align: center;
+}
+.login-container h1 {
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.4px;
+}
+.form-group { margin-bottom: 14px; text-align: left; }
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+}
+input {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(8,12,25,0.35);
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: box-shadow .18s ease, transform .12s ease;
+}
+input:focus {
+  box-shadow: 0 6px 18px rgba(37,117,252,0.12);
+  transform: translateY(-1px);
+  border-color: rgba(37,117,252,0.6);
+}
+.password-box { display:flex; gap:8px; align-items:center; }
+.password-box input { flex:1; }
+#togglePassword {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size: 18px;
+  color: #fff;
+}
+.btn {
+  margin-top: 6px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, rgba(37,117,252,1), rgba(106,17,203,0.95));
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 22px rgba(37,117,252,0.18);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.btn:active { transform: translateY(1px) scale(.998); box-shadow: 0 6px 18px rgba(37,117,252,0.12); }
+.signup-text { margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.75); }
+.signup-text a { color: #cbe0ff; text-decoration: none; font-weight: 600; }
+
+/* CRITICAL FIX: Ensure full width on small screens */
+@media (max-width: 420px){
+  .login-container { width: calc(100% - 36px); padding: 22px; border-radius: 14px; }
+  .bg-image, .bg-gradient, .bg-blur { animation-duration: 26s; }
+}
+
+/* Performance hints */
+.bg-image, .bg-gradient, .bg-blur { will-change: transform, opacity; transform: translateZ(0); }
+
+
+/* ---------------------------------------------------- */
+/* --- OTP MODAL STYLES (Neon Glass Card) --- */
+/* ---------------------------------------------------- */
+
+.otp-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  /* CRITICAL FIX: Use flexbox for centering */
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  background: rgba(3,6,16,0.8); /* Darker overlay */
+  backdrop-filter: blur(4px);
+}
+
+.otp-card {
+  width: 360px;
+  max-width: calc(100% - 40px);
+  padding: 30px 25px;
+  border-radius: 18px;
+  /* Frosted Glass Look */
+  background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  border: 1px solid rgba(0, 224, 255, 0.4); /* Neon Cyan Border */
+  backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(0, 224, 255, 0.4); /* Neon Glow */
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+
+.otp-close {
+  position: absolute;
+  top: 10px; right: 12px;
+  background: transparent; border: none; color: #00e0ff; font-size: 20px; cursor: pointer;
+  transition: transform 0.1s;
+}
+.otp-close:hover {
+    transform: rotate(90deg);
+}
+
+.otp-card h3 { 
+    margin-bottom: 8px;
+    color: #00e0ff; /* Neon Cyan Header */
+    font-size: 1.5rem;
+}
+.otp-card p { 
+    margin-bottom: 18px; 
+    font-size: 14px; 
+    color: rgba(255,255,255,0.8); 
+}
+
+.otp-card input {
+  width: 100%; 
+  padding: 14px; 
+  border-radius: 10px; 
+  margin-bottom: 20px;
+  background: rgba(8,12,25,0.6); 
+  border: 1px solid #00e0ff; /* Neon Input Border */
+  color: #fff; 
+  font-size: 18px;
+  text-align: center;
+}
+
+.otp-actions { 
+    display:flex; 
+    gap:10px; 
+    justify-content:center; 
+    margin-bottom:12px; 
+}
+
+/* Verify OTP Button (Primary Action) */
+.otp-actions #verifyOtpBtn {
+    flex:1; 
+    padding:12px 12px; 
+    border-radius:10px; 
+    cursor:pointer;
+    background: linear-gradient(90deg, #00e0ff, #3775ff); /* Neon Blue Gradient */
+    border: none;
+    color: #1a1a2a;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: transform 0.1s;
+}
+.otp-actions #verifyOtpBtn:active { transform: scale(0.98); }
+
+
+/* Resend OTP Button (Secondary Action) */
+.otp-actions #resendOtpBtn {
+    flex:1; 
+    padding:12px 12px; 
+    border-radius:10px; 
+    cursor:pointer;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-weight: 500;
+}
+.otp-actions #resendOtpBtn:hover { background: rgba(255, 255, 255, 0.2); }
+
+
+.otp-meta { 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    gap:10px; 
+    margin-top:6px; 
+}
+#otpTimer {
+    color: #ff0077; /* Neon Pink for Timer */
+    font-weight: bold;
+}
+.dev-btn { 
+    background: transparent; 
+    border: 1px dashed rgba(255,255,255,0.15); 
+    padding:6px 8px; 
+    border-radius:8px; 
+    font-size:12px; 
+    color:#fff; 
+    cursor:pointer; 
+}
+.dev-btn:hover { background: rgba(255,255,255,0.05); }

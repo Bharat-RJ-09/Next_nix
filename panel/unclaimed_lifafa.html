@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unclaimed Lifafas - NextEarnX</title>
+  <link rel="stylesheet" href="css/unclaimed_lifafa.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <a href="index.html" class="menu-btn"><i class="ri-arrow-left-line"></i></a>
+        <h1 class="logo">NextEarn<span>X</span></h1>
+        <button id="logoutBtn">Logout</button>
+    </nav>
+
+    <main class="unclaimed-container">
+        <div class="header-section">
+            <h2>Unclaimed Lifafas</h2>
+        </div>
+        <p class="welcome-msg">Review the Lifafas you have created that are still waiting for claims.</p>
+        
+        <section class="summary-card card">
+            <p>Total Active Lifafas: <span id="totalActiveCount">0</span></p>
+            <p>Total Unclaimed Amount: <span id="totalUnclaimedAmount">₹0.00</span></p>
+        </section>
+
+        <section class="list-card card">
+            <h3>Active Lifafa List</h3>
+            <div id="lifafaListContainer" class="log-area">
+                <p>Loading active Lifafas...</p>
+                </div>
+            <button id="refreshBtn" class="action-btn"><i class="ri-refresh-line"></i> Refresh List</button>
+        </section>
+        
+        <section class="refund-card card">
+            <h3>Close & Refund</h3>
+            <p class="note-msg">Manually close all open Lifafas and refund the remaining unclaimed amount to your wallet.</p>
+            <button id="refundAllBtn" class="action-btn refund-btn"><i class="ri-money-rupee-circle-line"></i> Refund Remaining Amount</button>
+        </section>
+
+          <section class="check-card card">
+            <h3>Special Lifafa Check</h3>
+            <p class="note-msg">Enter a mobile number to see which of your active Lifafas include this number in their Special Users list.</p>
+
+            <form id="checkLifafaForm">
+                <div class="form-group input-icon-group">
+                    <i class="ri-phone-line"></i>
+                    <input type="tel" id="checkMobileInput" placeholder="Enter 10-digit Mobile Number" pattern="[0-9]{10}" maxlength="10" required>
+                </div>
+                <button type="submit" id="checkNumberBtn" class="action-btn check-btn"><i class="ri-search-line"></i> Check Lifafas</button>
+            </form>
+            
+            <div id="checkResultArea" class="log-area" style="margin-top: 15px;">
+                <p>Results will appear here.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/unclaimed_lifafa.js"></script>
+</body>
+</html>

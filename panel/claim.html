@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claim Lifafa - NextEarnX</title>
+  <link rel="stylesheet" href="css/claim.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <a href="index.html" class="menu-btn"><i class="ri-arrow-left-line"></i></a>
+        <h1 class="logo">NextEarn<span>X</span></h1>
+        <button id="logoutBtn" style="display:none;">Logout</button>
+    </nav>
+
+    <main class="claim-container">
+        
+        <div id="loadingState" class="claim-status-card loading" style="display: block;">
+            <i class="ri-loader-line ri-spin"></i>
+            <h2>Loading Lifafa Details...</h2>
+            <p>Please wait while we verify the link.</p>
+        </div>
+        
+        <div id="errorState" class="claim-status-card error" style="display: none;">
+            <i class="ri-alert-line"></i>
+            <h2 id="errorTitle">Lifafa Not Found</h2>
+            <p id="errorMessage">The link is invalid or the Lifafa has expired/closed.</p>
+            <a href="login.html" class="action-btn">Go to Login</a>
+        </div>
+        
+        <section id="claimSection" class="claim-card card" style="display: none;">
+            
+            <h2 id="lifafaTitle">🎁 Lifafa Title Here</h2>
+            <p class="creator-info">From: <span id="creatorUsername">Loading...</span></p>
+            <p class="amount-info">Amount: <span id="claimAmountDisplay">₹?.??</span> (for <span id="claimCountDisplay">?</span> users)</p>
+            
+            <div id="requirementsStatus" class="requirements-box">
+                <h4>Claim Requirements:</h4>
+                <ul id="requirementsList">
+                    <li class="status-pending" id="reqStatusBan"><i class="ri-alert-line"></i> Banned Status Check: Pending</li>
+                    <li class="status-pending" id="reqStatusCode"><i class="ri-lock-line"></i> Access Code: N/A</li>
+                    <li class="status-pending" id="reqStatusTelegram"><i class="ri-telegram-line"></i> Telegram Join: N/A</li>
+                    <li class="status-pending" id="reqStatusReferral"><i class="ri-group-line"></i> Referrals: N/A</li>
+                </ul>
+            </div>
+
+            <form id="accessCodeForm" style="display:none;">
+                <div class="form-group input-icon-group">
+                    <i class="ri-key-2-line"></i>
+                    <input type="text" id="accessCodeInput" placeholder="Enter Access Code" required>
+                </div>
+                <button type="submit" class="submit-btn check-btn"><i class="ri-lock-unlock-line"></i> Verify Code</button>
+            </form>
+            
+            <button id="mainClaimBtn" class="submit-btn claim-btn" disabled><i class="ri-coupon-line"></i> Claim Lifafa</button>
+
+            <p id="finalStatusMessage" class="final-msg"></p>
+            
+            <div class="claim-log-area">
+                <p>Status Log:</p>
+                <div id="claimLog"></div>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <script src="js/claim.js"></script>
+</body>
+</html>

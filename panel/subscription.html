@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription - NextEarnX</title>
+  <link rel="stylesheet" href="css/subscription.css">
+  <link rel="stylesheet" href="css/theme_base.css">
+  <link rel="shortcut icon" href="assets/logo.jpg" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="menu-btn"><i class="ri-arrow-left-line"></i></a>
+        <h1 class="logo">NextEarn<span>X</span></h1>
+        <button id="logoutBtn">Logout</button>
+    </nav>
+
+    <div class="container">
+        <h2 id="statusMessage">Choose Your Plan</h2>
+        
+        <section class="plan-grid">
+            <div class="plan-card free" data-plan="1 Week Free" data-price="0">
+                <i class="ri-gift-line"></i>
+                <h3>1 Week Free Trial</h3>
+                <p class="price">₹0</p>
+                <p class="save-tag">Trial Plan</p>
+                <button class="select-btn">Select Plan</button>
+            </div>
+
+            <div class="plan-card discounted" data-plan="1 Month" data-price="59">
+                <i class="ri-rocket-line"></i>
+                <h3>1 Month Access</h3>
+                <p class="original-price">₹99</p>
+                <p class="price">₹59</p>
+                <p class="save-tag">Save 40%</p>
+                <button class="select-btn">Select Plan</button>
+            </div>
+
+            <div class="plan-card popular" data-plan="2 Months" data-price="109">
+                <i class="ri-sparkling-2-line"></i>
+                <h3>2 Months Access</h3>
+                <p class="original-price">₹179</p>
+                <p class="price">₹109</p>
+                <p class="save-tag">BEST VALUE | Save 39%</p>
+                <button class="select-btn">Select Plan</button>
+            </div>
+
+            <div class="plan-card discounted" data-plan="3 Months" data-price="159">
+                <i class="ri-vip-line"></i>
+                <h3>3 Months Access</h3>
+                <p class="original-price">₹269</p>
+                <p class="price">₹159</p>
+                <p class="save-tag">Save 41%</p>
+                <button class="select-btn">Select Plan</button>
+            </div>
+        </section>
+
+        <p class="note">All plans include access to all features and 24/7 priority support.</p>
+    </div>
+
+    <script src="js/subscription.js"></script>
+</body>
+</html>

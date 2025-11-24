@@ -1,0 +1,198 @@
+ 
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* CRITICAL CHANGE: Deep Black Background */
+  background: #00000a;
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  padding: 50px 0;
+}
+
+/* --- Animated Background Layer (Aqua Blur Balls) - Replacing complex old styles --- */
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* This element now acts as the pseudo-element container */
+  /* Remove old ::before, ::after, .bg-blur */
+}
+
+.background::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    /* Aqua/Cyan Radial Gradients (Blur Balls) */
+    background: 
+        /* Large Aqua Ball (Top Left) */
+        radial-gradient(circle at 20% 15%, rgba(0, 255, 255, 0.25), transparent 45%),
+        /* Smaller Cyan Ball (Bottom Right) */
+        radial-gradient(circle at 85% 75%, rgba(0, 224, 255, 0.30), transparent 40%),
+        /* Medium Aqua Glow (Center) */
+        radial-gradient(circle at 50% 50%, rgba(0, 160, 255, 0.15), transparent 60%);
+    
+    mix-blend-mode: screen;
+    filter: blur(50px);
+    animation: aquaFloat 25s infinite ease-in-out alternate;
+    opacity: 1; /* Ensure full opacity */
+}
+/* Keyframes for Floating Blur - REPLACING old animation blocks */
+ 
+/* -------------------------------------- */
+
+/* ---------- Glass Card (Signup) ---------- */
+.form-container, .login-container {
+  position: relative;
+  z-index: 2;
+  width: 360px;
+  /* CRITICAL FIX: Remove centering properties here, let body flexbox handle it */
+  /* REMOVED: margin: auto; margin-top: 20%; transform: translateY(-50%); */
+  
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px) saturate(1.05);
+  -webkit-backdrop-filter: blur(8px) saturate(1.05);
+  color: #e6eef8;
+  text-align: center;
+}
+
+/* Header */
+.form-container h2, .login-container h1 {
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.4px;
+}
+
+/* Form inputs */
+input {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(8,12,25,0.35);
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 14px;
+  transition: box-shadow .18s ease, transform .12s ease;
+}
+input:focus {
+  box-shadow: 0 6px 18px rgba(37,117,252,0.12);
+  transform: translateY(-1px);
+  border-color: rgba(37,117,252,0.6);
+}
+
+/* Button */
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, rgba(37,117,252,1), rgba(106,17,203,0.95));
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 22px rgba(37,117,252,0.18);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+button:active {
+  transform: translateY(1px) scale(.998);
+  box-shadow: 0 6px 18px rgba(37,117,252,0.12);
+}
+
+/* small messages */
+small { display:block; font-size:12px; margin-top:-10px; margin-bottom:8px; }
+
+/* Signup switch */
+.switch { margin-top:12px; font-size:13px; color: rgba(255,255,255,0.75);}
+.switch a { color:#cbe0ff; text-decoration:none; font-weight:600; }
+.switch a:hover { text-decoration:underline; }
+
+/* Mobile (CRITICAL FIX) */
+@media (max-width:420px){
+  .form-container, .login-container { 
+      width:calc(100% - 36px); 
+      padding:22px; 
+      border-radius:14px; 
+  }
+}
+
+/* --- OTP Verification Styles --- */
+.otp-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.otp-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.14s ease;
+}
+.send-btn {
+    background: linear-gradient(90deg, rgba(37,117,252,1), rgba(106,17,203,0.95));
+    color: white;
+    box-shadow: 0 4px 10px rgba(37,117,252,0.3);
+}
+#signupFinalBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+#otpVerificationSection {
+    margin-top: -10px; 
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05); 
+}
+#otpInput {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+.otp-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.resend-btn {
+    background: none;
+    border: none;
+    color: #cbe0ff;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+}
+.resend-btn:disabled {
+    color: #777;
+    cursor: not-allowed;
+}
+.verify-btn {
+    background: #00e0ff;
+    color: #1a1a2a;
+    font-weight: 700;
+}
+#otpStatusMessage {
+    display: block;
+    margin-top: 5px;
+    text-align: center;
+    font-size: 12px;
+}

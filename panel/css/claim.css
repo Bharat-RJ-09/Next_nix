@@ -1,0 +1,182 @@
+/* panel/css/claim.css - Lifafa Claim Page Styles */
+
+/* --- BASE STYLES (Neon Dark Theme Consistency) --- */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: linear-gradient(135deg, #0a0a1a, #1a0a2a);
+    color: #e6eef8;
+    min-height: 100vh;
+    padding-top: 60px; 
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* --- Animated Background Layer --- */
+body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+    background: radial-gradient(circle at 10% 20%, rgba(106,17,203,0.1), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(37,117,252,0.1), transparent 30%);
+    mix-blend-mode: screen;
+    animation: slowPan 30s infinite alternate;
+}
+
+/* --- NAVBAR (Fixed and Glass effect) --- */
+.navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    background: rgba(15, 15, 30, 0.6); backdrop-filter: blur(15px) saturate(1.2);
+    display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.menu-btn { color: #fff; font-size: 24px; text-decoration: none; }
+.logo { font-size: 24px; font-weight: 700; color: #fff; }
+.logo span { color: #00e0ff; }
+#logoutBtn { background: #ff0077; border: none; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+
+/* --- MAIN CONTAINER & CARDS --- */
+.claim-container {
+    padding: 20px;
+    max-width: 500px;
+    margin: 20px auto;
+}
+.card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border-radius: 18px;
+    padding: 30px;
+    backdrop-filter: blur(12px) saturate(1.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+/* Status Cards (Loading/Error) */
+.claim-status-card {
+    border: 2px solid #ffcc00;
+}
+.claim-status-card.error {
+    border-color: #ff0077;
+    box-shadow: 0 0 20px rgba(255,0,119,0.5);
+}
+.claim-status-card i {
+    font-size: 3rem;
+    color: #ffcc00;
+    margin-bottom: 15px;
+}
+.claim-status-card.error i {
+    color: #ff0077;
+}
+
+/* Claim Details */
+.claim-card h2 {
+    color: #00e0ff;
+    margin-bottom: 10px;
+}
+.creator-info {
+    color: #aaa;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+.amount-info {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #aaffaa;
+    margin-bottom: 25px;
+}
+
+/* Requirements Box */
+.requirements-box {
+    text-align: left;
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.requirements-box h4 {
+    color: #ffcc00;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+.requirements-box ul {
+    list-style: none;
+    padding: 0;
+}
+.requirements-box li {
+    padding: 5px 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Status Colors */
+.status-pending { color: #ffcc00; }
+.status-success { color: #aaffaa; }
+.status-failed { color: #ff0077; }
+.status-pending i { color: #ffcc00; }
+.status-success i { color: #aaffaa; }
+.status-failed i { color: #ff0077; }
+
+/* Code Input Form */
+#accessCodeForm {
+    margin-bottom: 20px;
+}
+.input-icon-group {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10px;
+}
+.input-icon-group input {
+    width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #00e0ff;
+    background: rgba(0,0,0,0.3); color: white; padding-left: 40px;
+}
+.input-icon-group i {
+    position: absolute; left: 10px; color: #00e0ff;
+}
+
+/* Claim Button */
+.submit-btn {
+    width: 100%; padding: 15px; border: none; border-radius: 10px;
+    font-weight: bold; cursor: pointer; transition: background 0.2s;
+}
+.claim-btn {
+    background: linear-gradient(90deg, #4169E1, #00e0ff); /* Blue/Cyan */
+    color: #1a1a2a;
+    font-size: 1.1rem;
+}
+.claim-btn:disabled {
+    background: #444;
+    cursor: not-allowed;
+    color: #999;
+}
+
+.check-btn {
+    background: #ffcc00;
+    color: #1a1a2a;
+    margin-top: 10px;
+}
+
+/* Log Area */
+.claim-log-area {
+    text-align: left;
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    max-height: 100px;
+    overflow-y: auto;
+}
+.claim-log-area p {
+    color: #aaa;
+    margin-bottom: 5px;
+}
+#claimLog p {
+    margin: 5px 0;
+    line-height: 1.4;
+    color: #e0e0e0;
+}

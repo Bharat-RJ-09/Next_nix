@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pay To User - NextEarnX</title>
+  <link rel="stylesheet" href="css/pay_to_other.css">
+  <link rel="stylesheet" href="css/theme_base.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <a href="index.html" class="menu-btn"><i class="ri-arrow-left-line"></i></a>
+        <h1 class="logo">NextEarn<span>X</span></h1>
+        <button id="logoutBtn">Logout</button>
+    </nav> <br> <br>
+
+    <main class="transfer-container">
+        <div class="header-section">
+            <h2>Pay To User</h2>
+            <p class="balance-status">Your Balance: <span id="currentBalanceDisplay" style="color:#aaffaa; font-weight:bold;">₹0.00</span></p>
+        </div>
+        
+        <section class="transfer-form-card card">
+            
+            <div class="main-tab-nav">
+                <button class="main-tab-btn active" data-tab="single">Single</button>
+                <button class="main-tab-btn" data-tab="bulk">BULK</button>
+            </div>
+            
+            <div id="singleContent" class="transfer-tab-content active">
+                
+                <div class="recent-check-bar">
+                    <i class="ri-history-line"></i>
+                    <button id="recentCheckBtn">Recent <i class="ri-arrow-down-s-line"></i></button>
+                    <div id="recentDropdown" class="recent-dropdown-content">
+                        <a href="#">Recent User 1</a>
+                        <a href="#">Recent User 2</a>
+                    </div>
+                </div>
+
+                <p class="status-msg">Max transfer limit is ₹100 per user per day. <a href="make_lifafa.html" style="color:#00e0ff;">Create Lifafa here.</a></p>
+                
+                <form id="transferForm">
+                    
+                    <div class="form-group input-icon-group">
+                        <i class="ri-phone-line" style="color:#4169E1;"></i>
+                        <input type="tel" id="recipientMobile" placeholder="Enter User NEX Number" pattern="[0-9]{10}" maxlength="10" required>  
+                    </div>
+                    <div style="margin-bottom: 15px;"><small id="recipientUsernameMsg" class="validation-msg"></small></div> 
+
+                    <div class="form-group input-icon-group">
+                        <i class="ri-money-rupee-circle-line" style="color:#4169E1;"></i>
+                        <input type="number" id="transferAmount" min="1" max="100" placeholder="Enter Amount" required>
+                    </div>
+
+                    <div class="form-group input-icon-group">
+                        <i class="ri-chat-3-line" style="color:#4169E1;"></i>
+                        <input type="text" id="paymentComment" placeholder="Enter Payment Comment (optional)">
+                    </div>
+
+                    <button type="submit" id="sendFundsBtn" class="submit-btn pay-btn">PAY</button>
+                </form>
+            </div>
+            
+            <div id="bulkContent" class="transfer-tab-content" style="display:none;">
+                
+                <form id="bulkTransferForm">
+                    
+                    <div class="form-group">
+                        <textarea id="bulkRecipientNumbers" rows="5" placeholder="All numbers should be separated by comma (,), period (.), or space, or line by line"></textarea>
+                    </div>
+
+                    <div class="form-group input-icon-group">
+                        <i class="ri-money-rupee-circle-line" style="color:#4169E1;"></i>
+                        <input type="number" id="bulkTransferAmount" min="1" placeholder="Enter Amount" required>
+                    </div>
+
+                    <div class="form-group input-icon-group">
+                        <i class="ri-chat-3-line" style="color:#4169E1;"></i>
+                        <input type="text" id="bulkPaymentComment" placeholder="Enter Payment Comment (optional)">
+                    </div>
+
+                    <button type="submit" id="nextBulkBtn" class="submit-btn pay-btn">NEXT</button>
+                    
+                    <button type="button" id="bulkHistoryBtn" class="submit-btn history-btn"><i class="ri-history-line"></i> BULK HISTORY</button>
+
+                </form>
+            </div>
+        </section>
+
+
+        <section class="result-display">
+            <h3>Activity Log</h3>
+            <div id="logArea">
+                <p>Ready to send...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/pay_to_other.js"></script>
+</body>
+</html>

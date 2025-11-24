@@ -1,0 +1,151 @@
+/* panel/css/ban_numbers.css - Ban Numbers Management Styles */
+
+/* --- BASE STYLES (Neon Dark Theme Consistency) --- */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: linear-gradient(135deg, #0a0a1a, #1a0a2a);
+    color: #e6eef8;
+    min-height: 100vh;
+    padding-top: 75px; 
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* --- Animated Background Layer --- */
+body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+    background: radial-gradient(circle at 10% 20%, rgba(106,17,203,0.1), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(37,117,252,0.1), transparent 30%);
+    mix-blend-mode: screen;
+    animation: slowPan 30s infinite alternate;
+}
+@keyframes slowPan {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-5%, 5%); }
+}
+
+/* --- NAVBAR (Fixed and Glass effect) --- */
+.navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    background: rgba(15, 15, 30, 0.6); backdrop-filter: blur(15px) saturate(1.2);
+    display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.menu-btn { color: #fff; font-size: 24px; text-decoration: none; }
+.logo { font-size: 24px; font-weight: 700; color: #fff; }
+.logo span { color: #00e0ff; }
+#logoutBtn { background: #ff0077; border: none; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+
+/* --- MAIN CONTAINER & CARDS --- */
+.ban-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+}
+.header-section h2 { color: #00e0ff; margin: 0; }
+
+/* Base Card Style */
+.card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border-radius: 18px;
+    padding: 25px;
+    backdrop-filter: blur(12px) saturate(1.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin-bottom: 30px;
+}
+.ban-status-header {
+    margin-bottom: 15px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.note-msg {
+    margin-bottom: 15px;
+    color: #ff0077; 
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Textarea Style */
+#banNumbersInput {
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.3);
+    color: white;
+    font-size: 1rem;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+#banNumbersInput:focus {
+    border-color: #00e0ff;
+    box-shadow: 0 0 5px rgba(0,224,255,0.5);
+    outline: none;
+}
+
+/* Add Button (Blue Gradient) */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.2s;
+    background: linear-gradient(90deg, #4169E1, #5c85ff);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(65, 105, 225, 0.4);
+}
+.submit-btn:hover {
+    background: linear-gradient(90deg, #5c85ff, #4169E1);
+}
+
+/* Ban List Display */
+.list-card h3 {
+    color: #ffcc00;
+    margin-bottom: 15px;
+}
+#currentBanList {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+.banned-number-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
+    font-size: 0.95rem;
+}
+.banned-number-item button {
+    background: #ff0077;
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+.banned-number-item:last-child {
+    border-bottom: none;
+}
+
+/* Log Area */
+.log-area {
+    background: rgba(0,0,0,0.5); border-radius: 8px; padding: 15px; max-height: 150px; 
+    overflow-y: auto; font-size: 14px; border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 600px) {
+    .ban-container { padding: 0 10px; }
+}

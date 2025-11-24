@@ -1,0 +1,233 @@
+/* admin/css/admin_dashboard.css - NextEarnX Manager Dashboard & Management Styles (Violet Theme) */
+
+/* --- BASE STYLES --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: #10071c; /* NEW: Dark Violet Background */
+    font-family: Inter, sans-serif;
+    color: #e6eef8;
+    overflow-y: auto;
+    padding-top: 60px; 
+}
+
+/* --- ADMIN NAVBAR (Dashboard & Management) --- */
+.admin-navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
+    background: #1b0a2c;
+    border-bottom: 2px solid #E040FB; /* NEW: Neon Violet Divider */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+}
+.admin-navbar .logo {
+    font-size: 26px;
+    font-weight: 700;
+    color: #E040FB; /* NEW: Neon Violet */
+}
+.admin-navbar .logo span {
+    color: #FF0077; /* NEW: Neon Pink Secondary Accent */
+}
+.admin-logout-btn {
+    background: #FF0077;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* --- MAIN CONTENT LAYOUT --- */
+.main-content {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+.main-content h2 {
+    color: #E040FB; /* NEW: Neon Violet */
+    margin-bottom: 5px;
+}
+.welcome-msg {
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+/* ---------------------------------------------------- */
+/* --- DASHBOARD SPECIFIC STYLES (STAT CARDS) --- */
+/* ---------------------------------------------------- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+.stat-card {
+    background: #2b114d;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    border-left: 5px solid #E040FB; /* NEW: Neon Violet Border */
+    position: relative;
+    color: #fff;
+}
+.stat-card h3 {
+    color: #E040FB; /* NEW: Neon Violet */
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+.stat-card p {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+.stat-card i {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 3rem;
+    color: rgba(224,64,251,0.2);
+}
+
+/* --- MANAGEMENT LINKS (Dashboard) --- */
+.link-grid {
+    display: flex;
+    gap: 20px;
+}
+.manage-link {
+    flex: 1;
+    background: #3c1964;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    transition: background 0.2s, transform 0.2s;
+}
+.manage-link:hover {
+    background: #4d237b;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+}
+.manage-link i {
+    font-size: 2.5rem;
+    color: #E040FB; /* NEW: Neon Violet Icon */
+    margin-bottom: 10px;
+    display: block;
+}
+.manage-link h4 {
+    margin: 0;
+}
+
+
+/* ---------------------------------------------------- */
+/* --- USER MANAGEMENT SPECIFIC STYLES --- */
+/* ---------------------------------------------------- */
+
+.back-link {
+    color: #E040FB; /* NEW: Neon Violet Link */
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+.back-link:hover { text-decoration: underline; }
+
+.search-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+#userSearchInput {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #E040FB; /* NEW: Neon Violet Border */
+    background: #2b114d;
+    color: #fff;
+}
+.action-btn {
+    background: #E040FB; /* NEW: Neon Violet Button */
+    color: #1a1a2a;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.action-btn:hover { background: #FF0077; /* NEW: Pink Hover */ }
+
+.user-table-container {
+    overflow-x: auto;
+    background: #2b114d; /* NEW: Table Container BG */
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+#userTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+#userTable th, #userTable td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #3c1964;
+}
+
+#userTable th {
+    background: #1b0a2c; /* NEW: Table Header BG */
+    color: #E040FB; /* NEW: Neon Violet Header Text */
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+#userTable tbody tr:hover {
+    background: #3c1964;
+}
+
+.action-buttons button {
+    background: none;
+    border: 1px solid #E040FB; /* NEW: Violet Border */
+    color: #E040FB; /* NEW: Violet Text */
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background 0.2s;
+}
+.action-buttons button:hover {
+    background: #E040FB; /* NEW: Violet Hover BG */
+    color: #1a1a2a;
+}
+.action-buttons .delete-btn {
+    border-color: #FF0077; /* NEW: Pink Delete Border */
+    color: #FF0077; /* NEW: Pink Delete Text */
+}
+.action-buttons .delete-btn:hover {
+    background: #FF0077; /* NEW: Pink Delete Hover BG */
+    color: #fff;
+}
+
+.table-info {
+    margin-top: 15px;
+    color: #aaa;
+}
+
+/* --- USER STATUS STYLES (Violet Theme Update) --- */
+.status-active {
+    color: #aaffaa; /* Green for Active (Kept green as it means good status) */
+    font-weight: bold;
+}
+.status-frozen {
+    color: #FF0077; /* NEW: Pink for Frozen */
+    font-weight: bold;
+}
+.status-banned {
+    color: #ff0000; /* Red for Banned (Kept red for danger) */
+    font-weight: bold;
+}
